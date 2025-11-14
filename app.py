@@ -6,23 +6,19 @@ import pickle
 # =============================
 # Load Model, Scaler, Features
 # =============================
-
 with open("models/model.pkl", "rb") as f:
     model, scaler, feature_list = pickle.load(f)
 
 # =============================
-# App Title
+# Streamlit UI
 # =============================
-
 st.set_page_config(page_title="Bankruptcy Prediction", layout="wide")
 st.title("Bankruptcy Prediction App")
 st.write("Enter financial ratios to predict bankruptcy risk.")
 
-
 # =============================
 # Input Form
 # =============================
-
 st.subheader("Input Financial Ratios")
 
 input_data = {}
@@ -37,16 +33,12 @@ for feature in feature_list:
 # Convert to DataFrame
 input_df = pd.DataFrame([input_data])
 
-
 # =============================
-# Prediction
+# Prediction Logic
 # =============================
-
 if st.button("Predict Bankruptcy"):
-    # Scale input
     scaled_input = scaler.transform(input_df)
 
-    # Predict probability
     probability = model.predict_proba(scaled_input)[0][1]
     prediction = model.predict(scaled_input)[0]
 
@@ -56,3 +48,10 @@ if st.button("Predict Bankruptcy"):
     if prediction == 1:
         st.error("⚠ High Risk of Bankruptcy (Class = 1)")
     else:
+        st.success("✔ Low Risk of Bankruptcy (Class = 0)")
+
+# =============================
+# Debug: Show Processed Input
+# =============================
+st.subheader("Processed Input")
+st.dataframe(input_df)
