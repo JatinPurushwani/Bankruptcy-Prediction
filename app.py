@@ -14,7 +14,7 @@ with open("models/model.pkl", "rb") as f:
 # =============================
 st.set_page_config(page_title="Bankruptcy Prediction", layout="wide")
 st.title("Bankruptcy Prediction App")
-st.write("Enter financial ratios to predict bankruptcy risk.")
+st.write("Enter the financial ratios below to estimate bankruptcy risk.")
 
 # =============================
 # Input Form
@@ -30,28 +30,32 @@ for feature in feature_list:
         format="%.6f"
     )
 
-# Convert to DataFrame
 input_df = pd.DataFrame([input_data])
 
 # =============================
-# Prediction Logic
+# Prediction Logic (Threshold = 0.30)
 # =============================
+
+THRESHOLD = 0.30
+
 if st.button("Predict Bankruptcy"):
     scaled_input = scaler.transform(input_df)
 
     probability = model.predict_proba(scaled_input)[0][1]
-    prediction = model.predict(scaled_input)[0]
+    prediction = int(probability > THRESHOLD)
 
     st.subheader("Results")
     st.write(f"**Bankruptcy Probability:** `{probability:.4f}`")
+    st.write(f"**Decision Threshold:** `{THRESHOLD}`")
 
     if prediction == 1:
-        st.error("⚠ High Risk of Bankruptcy (Class = 1)")
+        st.error("⚠ High Risk of Bankruptcy (Predicted Class = 1)")
     else:
-        st.success("✔ Low Risk of Bankruptcy (Class = 0)")
+        st.success("✔ Low Risk of Bankruptcy (Predicted Class = 0)")
 
 # =============================
-# Debug: Show Processed Input
+# Show Processed Input
 # =============================
-st.subheader("Processed Input")
+st.subheader("Processed Input Data")
 st.dataframe(input_df)
+
