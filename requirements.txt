@@ -1,0 +1,15 @@
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+streamlit
+pickle-mixin
+
+pandas - For reading CSV + data manipulation.
+numpy - Used internally by pandas and sklearn.
+scikit-learn - For RandomForest, scaling, evaluation metrics.
+matplotlib - For plotting.
+seaborn - For heatmap/confusion matrix.
+streamlit - For deployment of the prediction app.
+pickle-mixin - Some environments require this to safely load/save .pkl model files.
